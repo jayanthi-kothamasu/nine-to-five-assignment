@@ -113,9 +113,19 @@ where j.[value] > (select avg(a.value)
                  where s.data_type_code = '82')
 */
 4.1.Optional
-
-
-
+/*
+-- Optional CTE below
+WITH CTE_2016AvgValue AS (SELECT avg(a.value) as avg_value
+                 FROM LaborStatisticsDB.dbo.annual_2016 a    
+                 LEFT JOIN LaborStatisticsDB.dbo.series s  ON  a.series_id = s.series_id
+                 WHERE s.data_type_code = '82')
+                 
+SELECT j.series_id,i.industry_code,i.industry_name,j.[value]
+FROM LaborStatisticsDB.dbo.january_2017 J  
+LEFT JOIN LaborStatisticsDB.dbo.industry i ON j.id = i.id
+LEFT JOIN LaborStatisticsDB.dbo.annual_2016 a ON i.id = j.id
+where j.[value] > (select avg_value from CTE_2016AvgValue)
+*/
 
 
 ---4.2 small doubt
